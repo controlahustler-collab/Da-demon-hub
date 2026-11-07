@@ -264,7 +264,6 @@ let b=document.getElementById('demonChatBox');
 b.style.display=b.style.display==='flex'?'none':'flex';
 }
 async function sendDemon(){
- const GROQ_API_KEY ="gsk_" + "GA5Tckejfz2E8p4RpJVJWGdyb3FYhzYOhJTwNzpJeicqsdxgnpXS";
  let input=document.getElementById('dMsg');
  let box=document.getElementById('demonChatMsgs');
  if(!box) box=document.getElementById('demonChatBox');
@@ -274,20 +273,17 @@ async function sendDemon(){
  input.value='';
  box.scrollTop=box.scrollHeight;
  try{
-  let res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
+  let res=await fetch("https://da-demon-worker.flatking43.workers.dev",{
    method:"POST",
-   headers:{"Content-Type":"application/json","Authorization":`Bearer ${GROQ_API_KEY}`},
-   body:JSON.stringify({model:"openai/gpt-oss-20b",messages:[{role:"user",content:msg}]})
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({message:msg})
   });
   let data=await res.json();
-  if(data.error) throw new Error(data.error.message);
-  let reply=data.choices?.[0]?.message?.content||"No reply";
-  box.innerHTML+=`<div class="msg bo">${reply}</div>`;
+  box.innerHTML+=`<div class="msg bot">${data.reply}</div>`;
+  box.scrollTop=box.scrollHeight;
  }catch(e){
-  box.innerHTML+=`<div class="msg bo">Error: ${e.message}</div>`;
-  console.log(e);
+  box.innerHTML+=`<div class="msg bot">Error: ${e.message}</div>`;
  }
- box.scrollTop=box.scrollHeight;
 }
 </script>
 <!-- End Chat -->
