@@ -236,10 +236,12 @@ li{margin:8px 0;font-size:14px;line-height:1.6;color:#333}
 <a class="g" href="https://wa.me/2349048527494?text=Hello%20Da%20Demon%20Hub" target="_blank" style="margin-top:14px">Let's chat on WhatsApp - Click Here</a>
 <p style="margin-top:16px;font-size:11px">2026 Da Demon Educational Hub - Educational Only</p>
 </footer>
-<!-- Da Demon REAL AI Chat -->
+<!-- Da Demon REAL AI Chat - RIGHT SIDE FIXED -->
 <style>
-#demonChatBtn{position:fixed;bottom:20px;right:20px;background:#6d28d9;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-#demonChatBox{display:none;position:fixed;bottom:90px;right:20px;width:345px;max-width:92vw;height:460px;background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:9999;flex-direction:column;overflow:hidden;font-family:sans-serif}
+.demonChatBtn{position:fixed;background:#6d28d9;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;z-index:9998;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+#btnTop{top:80px;right:20px}
+#btnBottom{bottom:90px;right:20px}
+#demonChatBox{display:none;position:fixed;bottom:160px;right:20px;width:345px;max-width:92vw;height:460px;background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:9999;flex-direction:column;overflow:hidden;font-family:sans-serif}
 #demonChatHead{background:#6d28d9;color:#fff;padding:14px;font-weight:bold;display:flex;justify-content:space-between}
 #demonChatMsgs{flex:1;padding:12px;overflow-y:auto;background:#f8f5ff}
 .msg{margin:8px 0;padding:10px 12px;border-radius:12px;max-width:85%;font-size:14px;line-height:1.4}
@@ -249,14 +251,22 @@ li{margin:8px 0;font-size:14px;line-height:1.6;color:#333}
 #demonChatInput input{flex:1;border:none;padding:12px;outline:none}
 #demonChatInput button{background:#6d28d9;color:#fff;border:none;padding:0 18px;cursor:pointer;font-weight:bold}
 </style>
-<div id="demonChatBtn" onclick="document.getElementById('demonChatBox').style.display=document.getElementById('demonChatBox').style.display==='flex'?'none':'flex'">💬</div>
+
+<div id="btnTop" class="demonChatBtn" onclick="toggleChat()">💬</div>
+<div id="btnBottom" class="demonChatBtn" onclick="toggleChat()">💬</div>
+
 <div id="demonChatBox">
-<div id="demonChatHead"><span>Da Demon AI</span><span style="cursor:pointer" onclick="document.getElementById('demonChatBox').style.display='none'">✕</span></div>
-<div id="demonChatMsgs"><div class="msg bot">Hi! I'm Da Demon AI 🤖 Ask me anything about web design, your website, or how I can help you.</div></div>
+<div id="demonChatHead"><span>Da Demon AI</span><span style="cursor:pointer" onclick="toggleChat()">✕</span></div>
+<div id="demonChatMsgs"><div class="msg bot">Hi! I'm Da Demon AI 🤖 Ask me anything!</div></div>
 <div id="demonChatInput"><input id="dMsg" placeholder="Ask anything..." onkeypress="if(event.key==='Enter')sendD()"><button onclick="sendD()">➤</button></div>
 </div>
+
 <script>
-const GROQ_API_KEY = "PASTE_YOUR_gsk_KEY_HERE"; // <-- Paste your key here
+function toggleChat(){
+let b=document.getElementById('demonChatBox');
+b.style.display=b.style.display==='flex'?'none':'flex';
+}
+const GROQ_API_KEY = "PASTE_YOUR_gsk_KEY_HERE";
 async function sendD(){
 let input=document.getElementById('dMsg');let text=input.value.trim();if(!text)return;
 let box=document.getElementById('demonChatMsgs');
@@ -266,20 +276,15 @@ try{
 let res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
 method:"POST",
 headers:{"Content-Type":"application/json","Authorization":"Bearer "+GROQ_API_KEY},
-body:JSON.stringify({
-model:"llama-3.1-8b-instant",
-messages:[{role:"system",content:"You are Da Demon AI, a helpful assistant for Da Demon Hub website. You help with web design, website info, and general questions. Be friendly, short, helpful."},{role:"user",content:text}],
-max_tokens:500
-})
+body:JSON.stringify({model:"llama-3.1-8b-instant",messages:[{role:"system",content:"You are Da Demon AI, helpful assistant for Da Demon Hub website. Friendly, short."},{role:"user",content:text}],max_tokens:500})
 });
-let data=await res.json();
-document.getElementById('typing').remove();
-let reply=data.choices?.[0]?.message?.content||"Sorry, I had a small error. Please try again.";
+let data=await res.json();document.getElementById('typing').remove();
+let reply=data.choices?.[0]?.message?.content||"Sorry, error. Try again.";
 box.innerHTML+=`<div class="msg bot">${reply}</div>`;
-}catch(e){document.getElementById('typing').remove();box.innerHTML+=`<div class="msg bot">Error: Check your API key or internet. Make sure you pasted the key correctly.</div>`;}
+}catch(e){document.getElementById('typing').remove();box.innerHTML+=`<div class="msg bot">Error: Check API key</div>`;}
 box.scrollTop=box.scrollHeight;
 }
 </script>
-<!-- End Real AI Chat -->
+<!-- End Chat -->
 </body>
 </html>
