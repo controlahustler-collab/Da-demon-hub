@@ -273,13 +273,14 @@ async function sendDemon(){
  input.value='';
  box.scrollTop=box.scrollHeight;
  try{
-  let res=await fetch("https://da-demon-worker.flatking43.workers.dev",{
+  // NOW CALLING VERCEL - SAFE!
+  let res=await fetch("/api/chat",{
    method:"POST",
    headers:{"Content-Type":"application/json"},
    body:JSON.stringify({message:msg})
   });
   let data=await res.json();
-  box.innerHTML+=`<div class="msg bot">${data.reply}</div>`;
+  box.innerHTML+=`<div class="msg bot">${data.reply || data.message || JSON.stringify(data)}</div>`;
   box.scrollTop=box.scrollHeight;
  }catch(e){
   box.innerHTML+=`<div class="msg bot">Error: ${e.message}</div>`;
