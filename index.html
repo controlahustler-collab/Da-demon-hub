@@ -264,22 +264,30 @@ let b=document.getElementById('demonChatBox');
 b.style.display=b.style.display==='flex'?'none':'flex';
 }
 async function sendDemon(){
-const GROQ_API_KEY ="gsk_" + "dSJzuwqFUTuK88ohUdI5WGdyb3FYC05o2v1YEYTSgcqjgSqIV9k8";
-let input=document.getElementById('dMsg');let text=input.value.trim();if(!text)return;
-let box=document.getElementById('demonChatMsgs');
-box.innerHTML+=`<div class="msg user">${text}</div>`;input.value='';box.scrollTop=box.scrollHeight;
-box.innerHTML+=`<div class="msg bot" id="typing">Typing...</div>`;
-try{
-let res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
-method:"POST",
-headers:{"Content-Type":"application/json","Authorization":"Bearer "+GROQ_API_KEY},
-body:JSON.stringify({model:"llama-3.1-8b-instant",messages:[{role:"system",content:"You are Da Demon AI, helpful assistant for Da Demon Hub website. Friendly, short."},{role:"user",content:text}],max_tokens:500})
-});
-let data=await res.json();document.getElementById('typing').remove();
-let reply=data.choices?.[0]?.message?.content||"Sorry, error. Try again.";
-box.innerHTML+=`<div class="msg bot">${reply}</div>`;
-}catch(e){document.getElementById('typing').remove();box.innerHTML+=`<div class="msg bot">Error: Check API key</div>`;}
-box.scrollTop=box.scrollHeight;
+ const GROQ_API_KEY ="gsk_" +GA5Tckejfz2E8p4RpJVJWGdyb3FYhzYOhJTwNzpJeicqsdxgnpXS";
+ let input=document.getElementById('dMsg');
+ let box=document.getElementById('demonChatMsgs');
+ if(!box) box=document.getElementById('demonChatBox');
+ let msg=input.value.trim();
+ if(!msg) return;
+ box.innerHTML+=`<div class="msg us">${msg}</div>`;
+ input.value='';
+ box.scrollTop=box.scrollHeight;
+ try{
+  let res=await fetch("https://api.groq.com/openai/v1/chat/completions",{
+   method:"POST",
+   headers:{"Content-Type":"application/json","Authorization":`Bearer ${GROQ_API_KEY}`},
+   body:JSON.stringify({model:"llama-3.1-8b-instant",messages:[{role:"user",content:msg}]})
+  });
+  let data=await res.json();
+  if(data.error) throw new Error(data.error.message);
+  let reply=data.choices?.[0]?.message?.content||"No reply";
+  box.innerHTML+=`<div class="msg bo">${reply}</div>`;
+ }catch(e){
+  box.innerHTML+=`<div class="msg bo">Error: ${e.message}</div>`;
+  console.log(e);
+ }
+ box.scrollTop=box.scrollHeight;
 }
 </script>
 <!-- End Chat -->
