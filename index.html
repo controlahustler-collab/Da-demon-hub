@@ -264,7 +264,8 @@ function toggleChat(){
 let b=document.getElementById('demonChatBox');
 b.style.display=b.style.display==='flex'?'none':'flex';
 }
-const GROQ_API_KEY ="gsk_" + "dSJzuwqFUTuK88ohUdI5WGdyb3FYC05o2v1YEYTSgcqjgSqIV9k8";{
+async function sendDemon(){
+const GROQ_API_KEY ="gsk_" + "dSJzuwqFUTuK88ohUdI5WGdyb3FYC05o2v1YEYTSgcqjgSqIV9k8";
 let input=document.getElementById('dMsg');let text=input.value.trim();if(!text)return;
 let box=document.getElementById('demonChatMsgs');
 box.innerHTML+=`<div class="msg user">${text}</div>`;input.value='';box.scrollTop=box.scrollHeight;
